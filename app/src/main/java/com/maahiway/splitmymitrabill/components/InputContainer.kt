@@ -1,14 +1,13 @@
 package com.maahiway.splitmymitrabill.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -17,19 +16,29 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun InputContainer(inputValue: String, onClickAction: () -> Unit) {
+fun InputContainer(inputValue: String, onValueChanged: (String) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        OutlinedTextField(inputValue, label = { Text("Enter Value::") }, onValueChange = {
-
-        })
+        OutlinedTextField(
+            value = inputValue,
+            label = { Text("Enter Value::") },
+            onValueChange = onValueChanged,
+            keyboardActions = KeyboardActions { },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -41,7 +50,7 @@ fun InputContainer(inputValue: String, onClickAction: () -> Unit) {
             )
             Row(
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.weight(1f) // Pushes the content to the right
+                modifier = Modifier.weight(1f)
             ) {
                 IconButton(
                     modifier = Modifier.wrapContentWidth(), onClick = {}

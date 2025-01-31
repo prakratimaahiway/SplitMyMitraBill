@@ -14,6 +14,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,12 +71,15 @@ fun MainContainer() {
 
 @Composable
 fun MyInputCard() {
+    var inputValue = remember { mutableStateOf("0") }
     Card(
         modifier = Modifier.padding(10.dp),
         elevation = CardDefaults.cardElevation()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            InputContainer("test") { }
+            InputContainer(inputValue.toString(), onValueChanged = {
+                it= inputValue.toString()
+            })
             TipContainer()
         }
     }
