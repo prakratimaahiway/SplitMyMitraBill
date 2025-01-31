@@ -16,14 +16,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -35,9 +32,12 @@ fun InputContainer(inputValue: String, onValueChanged: (String) -> Unit) {
             value = inputValue,
             label = { Text("Enter Value::") },
             onValueChange = onValueChanged,
-            keyboardActions = KeyboardActions { },
+            keyboardActions = KeyboardActions {
+
+            },
             singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number)
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
