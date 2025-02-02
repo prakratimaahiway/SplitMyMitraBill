@@ -2,6 +2,7 @@ package com.maahiway.splitmymitrabill.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -13,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun TipContainer() {
+fun TipContainer(tipPercentage: String) {
     val sliderValue = remember {
         mutableFloatStateOf(0f)
     }
@@ -21,7 +22,11 @@ fun TipContainer() {
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.Center
     ) {
-        Text("33%")
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
+            Text("Tip")
+            Text(tipPercentage)
+        }
+
         Slider(
             value = sliderValue.floatValue,
             onValueChange = { newValue ->

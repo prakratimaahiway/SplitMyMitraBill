@@ -10,7 +10,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -67,8 +67,8 @@ fun InputContainer(inputValue: String, onValueChanged: (String) -> Unit) {
                     modifier = Modifier.wrapContentWidth()
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Add",
+                        imageVector = Icons.Filled.Clear,
+                        contentDescription = "Remove",
                         modifier = Modifier.size(24.dp)
                     )
                 }

@@ -34,7 +34,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MainContainer()
+            val inputValue by remember { mutableStateOf("0") }
+            MainContainer(inputValue)
 
         }
     }
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainContainer() {
+fun MainContainer(inputValue: String) {
     SplitMyMitraBillTheme {
         Scaffold(modifier = Modifier
             .fillMaxWidth()
@@ -61,8 +62,8 @@ fun MainContainer() {
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    TopComponent("200$")
-                    MyInputCard()
+                    TopComponent(inputValue)
+                    MyInputCard(inputValue)
                 }
 
             }
@@ -72,17 +73,17 @@ fun MainContainer() {
 }
 
 @Composable
-fun MyInputCard() {
-    var inputValue by remember { mutableStateOf("0") }
+fun MyInputCard(inputValue: String) {
+    var input by remember { mutableStateOf(inputValue) }
     Card(
         modifier = Modifier.padding(10.dp),
         elevation = CardDefaults.cardElevation()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            InputContainer(inputValue, onValueChanged = {
-                inputValue = it
+            InputContainer(input, onValueChanged = {
+                input=it
             })
-            TipContainer()
+            TipContainer("32")
         }
     }
 }
@@ -90,6 +91,6 @@ fun MyInputCard() {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainContainer()
+    MainContainer("200")
 }
 
