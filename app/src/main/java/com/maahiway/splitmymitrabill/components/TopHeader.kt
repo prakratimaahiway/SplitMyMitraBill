@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TopComponent(totalPerPerson: String) {
+fun TopHeader(totalPerPerson: String) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
-            .padding(12.dp),
+            .height(160.dp)
+            .padding(10.dp),
         color = Color.LightGray,
         shape = RoundedCornerShape(10.dp),
         border = BorderStroke(1.dp, Color.Black)
