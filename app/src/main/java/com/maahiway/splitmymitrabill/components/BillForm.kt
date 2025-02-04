@@ -27,6 +27,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BillForm(onValueChanged: (String) -> Unit) {
     val totalBillAmt = remember {
-        mutableStateOf("")
+        mutableStateOf(0.0)
+    }
+    val splitByState = remember {
+        mutableStateOf(1)
+    }
+    val range = IntRange(start = 1, endInclusive = 100)
+    val sliderPositionValue = remember {
+        mutableFloatStateOf(0f)
+    }
+    val tipPercentage = (sliderPositionValue.value * 100).toInt()
+    val tipAmountState = remember {
+        mutableStateOf(0.0)
     }
     Card(
         modifier = Modifier.padding(12.dp),
@@ -55,9 +67,9 @@ fun BillForm(onValueChanged: (String) -> Unit) {
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = totalBillAmt.value,
+                value = totalBillAmt.value.toString(),
                 label = { Text("Enter Bill Amount:") },
-                onValueChange = { totalBillAmt.value = it },
+                onValueChange = { newValue -> totalBillAmt.value = newValue.toDoubleOrNull() ?: 0.0 },
                 keyboardActions = KeyboardActions(onDone = {
                     Log.d(TAG, "TESTER${totalBillAmt.value}")
                 }),
@@ -67,92 +79,87 @@ fun BillForm(onValueChanged: (String) -> Unit) {
                     keyboardType = KeyboardType.Number
                 )
             )
-            TipContainer("23")
-        }
-    }
-}
-
-
-@Composable
-fun TipContainer(totalTip: String) {
-    val splitByState = remember {
-        mutableStateOf(1)
-    }
-    val range = IntRange(start = 1, endInclusive = 100)
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "Split", fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f)
-        )
-        Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.weight(1f)
-        ) {
-            IconButton(
-                modifier = Modifier.wrapContentWidth(), onClick = {
-                  if(splitByState.value < range.last) {
-                      splitByState.value += 1
-                   }
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = "Add",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            Text("${splitByState.value}", modifier = Modifier.align(Alignment.CenterVertically))
-            IconButton(
-                onClick = {
-                    splitByState.value = if (splitByState.value > 1)
-                        splitByState.value - 1
-                    else
-                        1
-                },
-                modifier = Modifier.wrapContentWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Clear,
-                    contentDescription = "Remove",
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-    }
-    val sliderValue = remember {
-        mutableFloatStateOf(0f)
-    }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-            Text("Tip")
-            Text(totalTip)
-        }
-
-        Column {
-
-            Text("33%")
-            Slider(
-                value = sliderValue.floatValue,
-                onValueChange = { newValue ->
-                    sliderValue.floatValue = newValue
-                },
-                valueRange = 0f..1f,
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                colors = SliderDefaults.colors(
-                    thumbColor = Color.Blue,
-                    activeTrackColor = Color.Blue,
-                    inactiveTrackColor = Color.Gray
-                ),
-                enabled = true
-            )
-        }
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "Split", fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    IconButton(
+                        modifier = Modifier.wrapContentWidth(), onClick = {
+                            if (splitByState.value < range.last) {
+                                splitByState.value += 1
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = "Add",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    Text("${splitByState.value}", modifier = Modifier.align(Alignment.CenterVertically))
+                    IconButton(
+                        onClick = {
+                            splitByState.value = if (splitByState.value > 1)
+                                splitByState.value - 1
+                            else
+                                1
+                        },
+                        modifier = Modifier.wrapContentWidth()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.Clear,
+                            contentDescription = "Remove",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                }
+            }
 
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                    Text("Tip")
+                    Text(" $ ${tipAmountState.value.toString()}")
+                }
+
+                Column {
+
+                    Text("$tipPercentage %")
+                    Slider(
+                        value = sliderPositionValue.floatValue,
+                        onValueChange = { newValue ->
+                            sliderPositionValue.floatValue = newValue
+                            tipAmountState.value = calculateTotalTip(totalBillAmt.value,tipPercentage)
+                        },
+                        valueRange = 0f..1f,
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = SliderDefaults.colors(
+                            thumbColor = Color.Blue,
+                            activeTrackColor = Color.Blue,
+                            inactiveTrackColor = Color.Gray
+                        ),
+                        enabled = true
+                    )
+                }
+
+            }
+        }
     }
 }
+
+fun calculateTotalTip(totalBillAmt: Double, tipPercentage: Int): Double {
+    return if(totalBillAmt > 1 && totalBillAmt.toString().isNotEmpty())
+        (totalBillAmt * tipPercentage)/100 else 0.0
+}
+
