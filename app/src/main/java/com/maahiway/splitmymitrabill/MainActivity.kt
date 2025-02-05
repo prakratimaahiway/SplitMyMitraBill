@@ -2,7 +2,6 @@ package com.maahiway.splitmymitrabill
 
 import android.os.Bundle
 import android.util.Log
-import android.util.Log.DEBUG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +14,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -46,11 +47,16 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
+
     val totalBillAmt = remember {
-        mutableStateOf("123")
+        mutableDoubleStateOf(0.0)
     }
-    val validState = remember(totalBillAmt.value) {
-        mutableStateOf(totalBillAmt.value.trim().isNotEmpty())
+    val splitByState = remember {
+        mutableIntStateOf(1)
+    }
+    val range = IntRange(start = 1, endInclusive = 100)
+    val totalPerPerson = remember {
+        mutableDoubleStateOf(0.0)
     }
     SplitMyMitraBillTheme {
         Scaffold(modifier = Modifier
@@ -70,8 +76,8 @@ fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    TopHeader(inputValue)
-                    BillForm()
+                    TopHeader(totalPerPerson)
+                    BillForm(range,splitByState,totalBillAmt,totalPerPerson)
                     {
                         Log.d("TESSS>>",inputValue)
                     }
@@ -79,7 +85,6 @@ fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
 
             }
         )
-
     }
 }
 

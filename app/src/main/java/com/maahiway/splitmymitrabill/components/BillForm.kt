@@ -24,8 +24,10 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableDoubleState
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,23 +36,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.maahiway.splitmymitrabill.util.calculateTotalPerPerson
+import com.maahiway.splitmymitrabill.util.calculateTotalTip
 
 @Composable
-fun BillForm(onValueChanged: (String) -> Unit) {
-    val totalBillAmt = remember {
-        mutableStateOf(0.0)
-    }
-    val splitByState = remember {
-        mutableStateOf(1)
-    }
-    val range = IntRange(start = 1, endInclusive = 100)
+fun BillForm(
+    range: IntRange = 1..100, splitByState: MutableIntState,
+    totalBillAmtState: MutableDoubleState, totalPerPerson: MutableDoubleState,
+    onValueChanged: (String) -> Unit
+) {
+
     val sliderPositionValue = remember {
         mutableFloatStateOf(0f)
     }
     val tipPercentage = (sliderPositionValue.value * 100).toInt()
     val tipAmountState = remember {
-        mutableStateOf(0.0)
+        mutableDoubleStateOf(0.0)
     }
+
     Card(
         modifier = Modifier.padding(12.dp),
         shape = RoundedCornerShape(10.dp),
@@ -63,11 +66,11 @@ fun BillForm(onValueChanged: (String) -> Unit) {
         ) {
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = totalBillAmt.value.toString(),
+                value = totalBillAmtState.value.toString(),
                 label = { Text("Enter Bill Amount:") },
-                onValueChange = { newValue -> totalBillAmt.value = newValue.toDoubleOrNull() ?: 0.0 },
+                onValueChange = { newValue -> totalBillAmtState.value = newValue.toDoubleOrNull() ?: 0.0 },
                 keyboardActions = KeyboardActions(onDone = {
-                    Log.d(TAG, "TESTER${totalBillAmt.value}")
+                    Log.d(TAG, "TESTER${totalBillAmtState.value}")
                 }),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -136,7 +139,12 @@ fun BillForm(onValueChanged: (String) -> Unit) {
                         value = sliderPositionValue.floatValue,
                         onValueChange = { newValue ->
                             sliderPositionValue.floatValue = newValue
-                            tipAmountState.value = calculateTotalTip(totalBillAmt.value,tipPercentage)
+                            tipAmountState.doubleValue = calculateTotalTip(totalBillAmtState.doubleValue, tipPercentage)
+                            totalPerPerson.doubleValue = calculateTotalPerPerson(
+                                totalBillAmtState.doubleValue,
+                                splitBy = splitByState.value,
+                                tipPercentage
+                            )
                         },
                         valueRange = 0f..1f,
                         modifier = Modifier.fillMaxWidth(),
@@ -154,8 +162,4 @@ fun BillForm(onValueChanged: (String) -> Unit) {
     }
 }
 
-fun calculateTotalTip(totalBillAmt: Double, tipPercentage: Int): Double {
-    return if(totalBillAmt > 1 && totalBillAmt.toString().isNotEmpty())
-        (totalBillAmt * tipPercentage)/100 else 0.0
-}
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableDoubleState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TopHeader(totalPerPerson: String) {
+fun TopHeader(totalPerPerson: MutableDoubleState) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -39,7 +40,7 @@ fun TopHeader(totalPerPerson: String) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                totalPerPerson,
+                totalPerPerson.value.toString(),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
