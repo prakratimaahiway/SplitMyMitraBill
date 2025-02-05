@@ -35,8 +35,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val inputValue by remember { mutableStateOf("123") }
             MainContainer(inputValue)
-            { billAmt->
-               Log.d("TAG","Bill Amt->$billAmt")
+            { billAmt ->
+                Log.d("TAG", "Bill Amt->$billAmt")
 
             }
 
@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
+fun MainContainer(inputValue: String, onValChanged: (String) -> Unit) {
 
     val totalBillAmt = remember {
         mutableDoubleStateOf(0.0)
@@ -56,7 +56,7 @@ fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
     }
     val range = IntRange(start = 1, endInclusive = 100)
     val totalPerPerson = remember {
-        mutableDoubleStateOf(0.0)
+        mutableStateOf<Double?>(0.0)
     }
     SplitMyMitraBillTheme {
         Scaffold(modifier = Modifier
@@ -77,12 +77,10 @@ fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
                         fontWeight = FontWeight.Bold
                     )
                     TopHeader(totalPerPerson)
-                    BillForm(range,splitByState,totalBillAmt,totalPerPerson)
+                    BillForm(range, splitByState, totalBillAmt, totalPerPerson)
                     {
-                        Log.d("TESSS>>",inputValue)
                     }
                 }
-
             }
         )
     }
@@ -92,6 +90,6 @@ fun MainContainer(inputValue: String, onValChanged:(String)->Unit) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    MainContainer("200"){}
+    MainContainer("200") {}
 }
 
