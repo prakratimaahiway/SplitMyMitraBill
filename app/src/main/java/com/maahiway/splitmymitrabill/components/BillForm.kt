@@ -6,7 +6,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -139,16 +141,16 @@ fun BillForm(
                     }
                 }
             }
-
+            Spacer(modifier = Modifier.height(16.dp))
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.Center
             ) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-                    Text("Tip")
+                    Text("Tip",fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                     Text(" $ ${tipAmountState.value}")
                 }
-
+                Spacer(modifier = Modifier.height(16.dp))
                 Column {
 
                     Text("$tipPercentage %")
