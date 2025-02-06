@@ -153,7 +153,7 @@ fun BillForm(
                 Spacer(modifier = Modifier.height(16.dp))
                 Column {
 
-                    Text("$tipPercentage %")
+                    Text("$tipPercentage %", modifier = Modifier.align(Alignment.CenterHorizontally))
                     Slider(
                         value = sliderPositionValue.floatValue,
                         onValueChange = { newValue ->
