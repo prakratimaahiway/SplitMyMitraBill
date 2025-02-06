@@ -10,8 +10,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -19,7 +23,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +52,9 @@ class MainActivity : ComponentActivity() {
 }
 
 
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainContainer(inputValue: String, onValChanged: (String) -> Unit) {
 
@@ -62,6 +72,16 @@ fun MainContainer(inputValue: String, onValChanged: (String) -> Unit) {
         Scaffold(modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight(),
+            topBar = {
+                TopAppBar(title = { Text("SplitMyMitra Bill", fontSize = 24.sp) }, navigationIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_money_off_24),
+                        contentDescription = "Money Icon",
+                        modifier = Modifier.padding(start = 16.dp),
+                        tint = Color.Black
+                    )
+                })
+            },
             content = { paddingValue ->
                 Column(
                     modifier = Modifier
@@ -70,16 +90,8 @@ fun MainContainer(inputValue: String, onValChanged: (String) -> Unit) {
                         .padding(paddingValue),
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        "Welcome to the SplitMyMitra Bill App!",
-                        modifier = Modifier.padding(20.dp),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
                     TopHeader(totalPerPerson)
-                    BillForm(range, splitByState, totalBillAmt, totalPerPerson)
-                    {
-                    }
+                    BillForm(range, splitByState, totalBillAmt, totalPerPerson){}
                 }
             }
         )
