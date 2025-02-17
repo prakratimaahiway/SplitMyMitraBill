@@ -1,1 +1,2 @@
 SplitMyMitra Bill is a simple and intuitive mobile application designed to help users easily split bills among a group of friends, family, or colleagues. Whether you're dining out, sharing groceries, or splitting expenses on a group trip, this app helps you manage and divide the total amount in seconds.
+<img width="353" alt="Screenshot 2025-02-17 at 12 24 42 PM" src="https://github.com/user-attachments/assets/b02c8730-05ed-442c-93a8-88cad41c2b6e" />
